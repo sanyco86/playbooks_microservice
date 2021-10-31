@@ -13,6 +13,8 @@ ansible all -m ping
 setup
 ```
 ansible-playbook setup.yml
+ansible-playbook elasticstack.yml
+ansible-playbook filebeat.yml
 ansible-playbook postgresql.yml
 ansible-playbook rabbitmq.yml
 ansible-playbook nginx.yml

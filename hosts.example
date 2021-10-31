@@ -1,6 +1,3 @@
-[docker]
-XXX.XXX.XXX.XXX
-
 [db]
 XXX.XXX.XXX.XXX
 
@@ -11,6 +8,9 @@ XXX.XXX.XXX.XXX
 XXX.XXX.XXX.XXX
 
 [app]
+XXX.XXX.XXX.XXX
+
+[elk]
 XXX.XXX.XXX.XXX
 
 [all:vars]
