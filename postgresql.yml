@@ -1,0 +1,66 @@
+---
+- hosts: db
+  become: yes
+  gather_facts: no
+  tasks:
+    - name: ensure apt cache is up to date
+      apt:
+        update_cache: yes
+        cache_valid_time: 86400
+    - name: ensure packages are installed
+      apt:
+        name:
+          - postgresql
+          - libpq-dev
+          - python3-psycopg2
+          - acl
+- hosts: db
+  become: yes
+  become_user: postgres
+  gather_facts: no
+  tasks:
+    - name: ensure database is created
+      postgresql_db:
+        name: '{{ ads_db_name }}'
+    - name: ensure user has access to database
+      postgresql_user:
+        db: '{{ ads_db_name }}'
+        name: '{{ ads_db_user }}'
+        password: '{{ ads_db_password }}'
+        priv: ALL
+    - name: ensure user has no extra privileges
+      postgresql_user:
+        name: '{{ ads_db_user }}'
+        role_attr_flags: NOSUPERUSER,NOCREATEDB
+    - name: ensure no other user can access the database
+      postgresql_privs:
+        db: '{{ ads_db_name }}'
+        role: PUBLIC
+        type: database
+        priv: ALL
+        state: absent
+- hosts: db
+  become: yes
+  become_user: postgres
+  gather_facts: no
+  tasks:
+    - name: ensure database is created
+      postgresql_db:
+        name: '{{ auth_db_name }}'
+    - name: ensure user has access to database
+      postgresql_user:
+        db: '{{ auth_db_name }}'
+        name: '{{ auth_db_user }}'
+        password: '{{ auth_db_password }}'
+        priv: ALL
+    - name: ensure user has no extra privileges
+      postgresql_user:
+        name: '{{ auth_db_user }}'
+        role_attr_flags: NOSUPERUSER,NOCREATEDB
+    - name: ensure no other user can access the database
+      postgresql_privs:
+        db: '{{ auth_db_name }}'
+        role: PUBLIC
+        type: database
+        priv: ALL
+        state: absent
